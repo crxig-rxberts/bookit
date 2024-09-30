@@ -1,24 +1,7 @@
-import axios from 'axios';
-import {store} from '../store/store';
+import createAxiosWithAuth from './axiosWithAuth';
 
 const API_URL = 'http://10.0.2.2:3002/api/search/';
-const searchInstance = axios.create({
-  baseURL: API_URL,
-});
-
-searchInstance.interceptors.request.use(
-  async config => {
-    const state = store.getState().auth;
-    const token = state.accessToken;
-
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-
-    return config;
-  },
-  error => Promise.reject(error),
-);
+const searchInstance = createAxiosWithAuth(API_URL);
 
 export const submitSearchData = async providerData => {
   try {
