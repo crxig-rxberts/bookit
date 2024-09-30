@@ -1,24 +1,7 @@
-import axios from 'axios';
-import {store} from '../store/store';
+import createAxiosWithAuth from './axiosWithAuth';
 
 const API_URL = 'http://10.0.2.2:3010/api/';
-const clientInstance = axios.create({
-  baseURL: API_URL,
-});
-
-clientInstance.interceptors.request.use(
-  async config => {
-    const state = store.getState().auth;
-    const token = state.accessToken;
-
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-
-    return config;
-  },
-  error => Promise.reject(error),
-);
+const clientInstance = createAxiosWithAuth(API_URL);
 
 export const createClient = async clientData => {
   try {

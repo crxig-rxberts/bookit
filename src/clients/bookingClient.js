@@ -1,24 +1,7 @@
-import axios from 'axios';
-import {store} from '../store/store';
+import createAxiosWithAuth from './axiosWithAuth';
 
 const API_URL = 'http://10.0.2.2:3008/api/bookings/';
-const bookingInstance = axios.create({
-  baseURL: API_URL,
-});
-
-bookingInstance.interceptors.request.use(
-  async config => {
-    const state = store.getState().auth;
-    const token = state.accessToken;
-
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-
-    return config;
-  },
-  error => Promise.reject(error),
-);
+const bookingInstance = createAxiosWithAuth(API_URL);
 
 export const createBooking = async bookingData => {
   try {
